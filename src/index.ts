@@ -6,6 +6,8 @@ import cors from "cors";
 import masterRouter from "src/routes/master_route.js";
 
 const PORT = process.env.PORT || 5003;
+const HOST = process.env.HOST || "localhost";
+const TIME = new Date().toLocaleString();
 
 const app = express();
 app.use(cors({
@@ -21,6 +23,17 @@ app.get("/", (req, res) => {
 });
 app.use(masterRouter)
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const server = app.listen(PORT, () => {
+  const startTime = TIME;
+  console.log(`🟢 Server started at ${startTime}`);
+  console.log(`🚀 Listening at: http://${HOST}:${PORT}`);
+});
+
+// Handle server stop (Ctrl+C)
+process.on("SIGINT", () => {
+  const stopTime = TIME;
+  console.log(`\n🛑 Server stopped at ${stopTime}`);
+  server.close(() => {
+    process.exit(0);
+  });
 });

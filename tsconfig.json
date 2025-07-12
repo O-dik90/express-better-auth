@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@generated/*": ["../generated/*"]
+      "@generated/*": ["../generated/*"],
+      "src/*": ["./src/*"]
     },
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */
