@@ -7,18 +7,18 @@ import z from "zod";
 
 const router = Router();
 router.post(
-  "/create-master", 
-  validateRequest({body: CreateMasterSchema}), 
+  "/create-master",
+  validateRequest({ body: CreateMasterSchema }),
   async (req: Request, res: Response): Promise<void> => {
     const params = req.body;
     const result = await CreateMaster(params);
-    
+
     ValidateResponse(result.status, MasterResponseSchema, result, res);
   }
 );
 
 router.get("/get-list-master",
-  validateRequest({params:PaginationSchema }) ,
+  validateRequest({ params: PaginationSchema }),
   async (req: Request, res: Response): Promise<void> => {
     const params = PaginationSchema.parse(req.query);
 
@@ -28,9 +28,9 @@ router.get("/get-list-master",
   }
 );
 
-router.get("/get-master/:id", 
+router.get("/get-master/:id",
   validateRequest({
-    params: z.object({id: z.string()})
+    params: z.object({ id: z.string() })
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
@@ -42,21 +42,21 @@ router.get("/get-master/:id",
 
 router.put("/update-master/:id",
   validateRequest({
-    params: z.object({id: z.string()}),
+    params: z.object({ id: z.string() }),
     body: CreateMasterSchema
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const params = req.body;
     const result = await UpdateMaster(id, params);
-    
+
     ValidateResponse(result.status, MasterResponseSchema, result, res);
   }
 )
 
 router.delete("/delete-master/:id",
   validateRequest({
-    params: z.object({id: z.string()})
+    params: z.object({ id: z.string() })
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;

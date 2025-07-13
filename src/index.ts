@@ -4,6 +4,9 @@ import { toNodeHandler } from "better-auth/node";
 import  { auth } from "./auth.js";
 import cors from "cors";
 import masterRouter from "src/routes/master_route.js";
+import userRoute from "src/routes/user.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./docs/index.js";
 
 const PORT = process.env.PORT || 5003;
 const HOST = process.env.HOST || "localhost";
@@ -15,18 +18,29 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
-app.all("/api/auth/*splat", toNodeHandler(auth));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Express Better Auth API Documentation"
+}));
+
+app.get("/", (req, res) => {
+  res.json({ msg: "better-auth express-js typescript swagger docs"});
+});
+
+// Better Auth handler - must be before express.json()
+app.all("/api/auth/{*any}", toNodeHandler(auth));
+
 // Don’t use express.json() before the Better Auth handler. Use it only for other routes, or the client API will get stuck on "pending".
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("better-auth express-js typescript");
-});
-app.use(masterRouter)
+app.use(masterRouter);
+app.use(userRoute);
 
 const server = app.listen(PORT, () => {
   const startTime = TIME;
   console.log(`🟢 Server started at ${startTime}`);
   console.log(`🚀 Listening at: http://${HOST}:${PORT}`);
+  console.log(`📚 API Documentation: http://${HOST}:${PORT}/api-docs`);
 });
 
 // Handle server stop (Ctrl+C)

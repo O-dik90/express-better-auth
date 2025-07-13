@@ -8,7 +8,12 @@ export const auth = betterAuth({
     provider: "mysql", // or "mysql", "postgresql", ...etc
   }),
   emailAndPassword: {
-    enabled: true
+    enabled: true,
+    requireEmailVerification: false
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 *  1,
+    updateAge: 60 * 60 * 24 * 1
   },
   trustedOrigins: ["http://localhost:5173"]
 })
