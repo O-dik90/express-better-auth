@@ -1,19 +1,20 @@
 import { Router, Request, Response } from "express";
-import { CreateMaster, DeleteMaster, GetListMaster, GetMaster, UpdateMaster } from "src/controller/masters/index.js";
-import { MasterResponseSchema, CreateMasterSchema, GetListMasterResponseSchema, PaginationSchema } from "src/controller/masters/schema.js";
+import { CreateBaseProposal, DeleteBaseProposal, GetBaseProposal, GetListBaseProposal, UpdateBaseProposal } from "src/controller/base-proposal/index.js";
+import { BaseProposalSchema, PaginationSchema, ResListBaseProposalSchema } from "src/controller/base-proposal/schema.js";
 import { validateRequest } from "src/middleware/validate-req.js";
 import { ValidateResponse } from "src/middleware/validate-response.js";
 import z from "zod";
+import { ResBaseProposalSchema } from '../controller/base-proposal/schema.js';
 
 const router = Router();
 router.post(
   "/create-master",
-  validateRequest({ body: CreateMasterSchema }),
+  validateRequest({ body: BaseProposalSchema }),
   async (req: Request, res: Response): Promise<void> => {
     const params = req.body;
-    const result = await CreateMaster(params);
+    const result = await CreateBaseProposal(params);
 
-    ValidateResponse(result.status, MasterResponseSchema, result, res);
+    ValidateResponse(result.status, ResBaseProposalSchema, result, res);
   }
 );
 
@@ -22,9 +23,9 @@ router.get("/get-list-master",
   async (req: Request, res: Response): Promise<void> => {
     const params = PaginationSchema.parse(req.query);
 
-    const result = await GetListMaster(params);
+    const result = await GetListBaseProposal(params);
 
-    ValidateResponse(result.status, GetListMasterResponseSchema, result, res);
+    ValidateResponse(result.status, ResListBaseProposalSchema, result, res);
   }
 );
 
@@ -34,23 +35,23 @@ router.get("/get-master/:id",
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const result = await GetMaster(id);
+    const result = await GetBaseProposal(id);
 
-    ValidateResponse(result.status, MasterResponseSchema, result, res);
+    ValidateResponse(result.status, ResBaseProposalSchema, result, res);
   }
 );
 
 router.put("/update-master/:id",
   validateRequest({
     params: z.object({ id: z.string() }),
-    body: CreateMasterSchema
+    body: BaseProposalSchema
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const params = req.body;
-    const result = await UpdateMaster(id, params);
+    const result = await UpdateBaseProposal(id, params);
 
-    ValidateResponse(result.status, MasterResponseSchema, result, res);
+    ValidateResponse(result.status, ResBaseProposalSchema, result, res);
   }
 )
 
@@ -60,9 +61,9 @@ router.delete("/delete-master/:id",
   }),
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const result = await DeleteMaster(id);
+    const result = await DeleteBaseProposal(id);
 
-    ValidateResponse(result.status, MasterResponseSchema, result, res);
+    ValidateResponse(result.status, ResBaseProposalSchema, result, res);
   }
 )
 

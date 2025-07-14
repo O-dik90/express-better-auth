@@ -88,8 +88,10 @@ model FrameProposal {
   id            String    @id @default(uuid())
   name          String
   init          String
+  master_genpro_id String
+  proposal_type MasterGenpro    @relation(fields: [master_genpro_id], references: [id], onDelete: Cascade)
   description   String?
-  detail        Json
+  detail        Json? 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -105,6 +107,7 @@ model MasterGenpro {
   updatedAt     DateTime  @updatedAt
 
   @@map("master_genpro")
+  FrameProposal FrameProposal[]
 }
 
 model MasterUserType {

@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { ICreateMaster, IPaginationParams } from "./schema.js";
+import { IBaseProposal, IPaginationParams } from "./schema.js";
 
 const db = new PrismaClient();
-export const CreateMaster = async (master: ICreateMaster) => {
+export const CreateBaseProposal = async (master: IBaseProposal) => {
   const { name, category, description } = master;
   try {
     const existMaster = await db.baseProposal.findFirst({
@@ -37,7 +37,7 @@ export const CreateMaster = async (master: ICreateMaster) => {
   }
 };
 
-export const GetListMaster = async (params: IPaginationParams) => {
+export const GetListBaseProposal = async (params: IPaginationParams) => {
   const { keyword, page, page_size, sort } = params;
 
   try {
@@ -83,7 +83,7 @@ export const GetListMaster = async (params: IPaginationParams) => {
   }
 };
 
-export const GetMaster = async (master_id: string) => {
+export const GetBaseProposal = async (master_id: string) => {
   try {
     const res = await db.baseProposal.findFirst({
       where: {
@@ -109,7 +109,7 @@ export const GetMaster = async (master_id: string) => {
   }
 };
 
-export const UpdateMaster = async (master_id: string, master_update: ICreateMaster) => {
+export const UpdateBaseProposal = async (master_id: string, master_update: IBaseProposal) => {
   const { name, category, description } = master_update;
   try {
     const existMaster = await db.baseProposal.findFirst({
@@ -147,7 +147,7 @@ export const UpdateMaster = async (master_id: string, master_update: ICreateMast
   }
 };
 
-export const DeleteMaster = async (master_id: string) => {
+export const DeleteBaseProposal = async (master_id: string) => {
   try {
     const existMaster = await db.baseProposal.findFirst({
       where: {

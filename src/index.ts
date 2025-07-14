@@ -3,7 +3,7 @@ import express from "express";
 import { toNodeHandler } from "better-auth/node";
 import  { auth } from "./auth.js";
 import cors from "cors";
-import masterRouter from "src/routes/master_route.js";
+import masterRouter from "src/routes/master-route.js";
 import userRoute from "src/routes/user.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/index.js";

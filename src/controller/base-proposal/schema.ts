@@ -8,7 +8,7 @@ export const PaginationSchema = z.object({
   sort: z.enum(["asc", "desc"]).default("desc"),
 });
 
-export const CreateMasterSchema = z.object({
+export const BaseProposalSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   category: z.string().min(1, "Category is required"),
@@ -17,16 +17,16 @@ export const CreateMasterSchema = z.object({
   updateAt: z.date().optional(),
 });
 
-export const MasterResponseSchema = z.object({
+export const ResBaseProposalSchema = z.object({
   status: z.number(),
   message: z.string(),
-  data: CreateMasterSchema.optional().nullable(),
+  data: BaseProposalSchema.optional().nullable(),
 });
 
-export const GetListMasterResponseSchema = z.object({
+export const ResListBaseProposalSchema = z.object({
   status: z.number(),
   message: z.string(),
-  data: z.array(CreateMasterSchema).optional().nullable(),
+  data: z.array(BaseProposalSchema).optional().nullable(),
   meta: z.object({
     total: z.number(),
     page: z.number(),
@@ -35,5 +35,5 @@ export const GetListMasterResponseSchema = z.object({
   }).optional()
 });
 // Type inference
-export type ICreateMaster = z.infer<typeof CreateMasterSchema>;
+export type IBaseProposal = z.infer<typeof BaseProposalSchema>;
 export type IPaginationParams = z.infer<typeof PaginationSchema>;
