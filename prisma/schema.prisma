@@ -73,33 +73,38 @@ model Verification {
   @@map("verification")
 }
 
-model BaseProposal {
-  id            String    @id @default(uuid())
+model ComponentProposal {
+  id            String    @id @default(cuid())
   name          String
   category      String
   description   String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  @@map("base_proposal")
+  @@map("component_proposal")
 }
 
-model FrameProposal {
-  id            String    @id @default(uuid())
-  name          String
-  init          String
-  master_genpro_id String
-  proposal_type MasterGenpro    @relation(fields: [master_genpro_id], references: [id], onDelete: Cascade)
+model TemplateProposal {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  masterId      String
+  masterGenpro  MasterGenpro? @relation(fields: [masterId], references: [id], onDelete: Cascade)
   description   String?
-  detail        Json? 
+  bab1          Json?
+  bab2          Json?
+  bab3          Json?
+  bab4          Json?
+  bab5          Json?
+  luaran        Json?
+  lampiran      Json?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  @@map("frame_proposal")
+  @@map("template_proposal")
 }
 
 model MasterGenpro {
-  id            String    @id @default(uuid())
+  id            String    @id @default(cuid())
   name          String
   init          String
   description   String?
@@ -107,28 +112,5 @@ model MasterGenpro {
   updatedAt     DateTime  @updatedAt
 
   @@map("master_genpro")
-  FrameProposal FrameProposal[]
-}
-
-model MasterUserType {
-  id            String    @id @default(uuid())
-  init          String
-  name          String
-  description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@map("master_user_type")
-}
-
-model MasterCitation {
-  id            String    @id @default(uuid())
-  name          String
-  category      String
-  init          String
-  description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@map("master_citation")
+  TemplateProposal TemplateProposal[]
 }

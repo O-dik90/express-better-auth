@@ -5,7 +5,7 @@ const db = new PrismaClient();
 export const CreateBaseProposal = async (master: IBaseProposal) => {
   const { name, category, description } = master;
   try {
-    const existMaster = await db.baseProposal.findFirst({
+    const existMaster = await db.componentProposal.findFirst({
       where: {
         name: name
       },
@@ -16,7 +16,7 @@ export const CreateBaseProposal = async (master: IBaseProposal) => {
       message: "Master already exists"
     };
     
-    const res = await db.baseProposal.create({
+    const res = await db.componentProposal.create({
       data: {
         name,
         category: category ?? null,
@@ -42,7 +42,7 @@ export const GetListBaseProposal = async (params: IPaginationParams) => {
 
   try {
     const [data, total] = await Promise.all([
-      db.baseProposal.findMany({
+      db.componentProposal.findMany({
         where: {
           name: {
             contains: keyword,
@@ -54,7 +54,7 @@ export const GetListBaseProposal = async (params: IPaginationParams) => {
           createdAt: sort,
         },
       }),
-      db.baseProposal.count({
+      db.componentProposal.count({
         where: {
           name: {
             contains: keyword,
@@ -85,7 +85,7 @@ export const GetListBaseProposal = async (params: IPaginationParams) => {
 
 export const GetBaseProposal = async (master_id: string) => {
   try {
-    const res = await db.baseProposal.findFirst({
+    const res = await db.componentProposal.findFirst({
       where: {
         id: master_id,
       },
@@ -112,7 +112,7 @@ export const GetBaseProposal = async (master_id: string) => {
 export const UpdateBaseProposal = async (master_id: string, master_update: IBaseProposal) => {
   const { name, category, description } = master_update;
   try {
-    const existMaster = await db.baseProposal.findFirst({
+    const existMaster = await db.componentProposal.findFirst({
       where: {
         id: master_id
       },
@@ -123,7 +123,7 @@ export const UpdateBaseProposal = async (master_id: string, master_update: IBase
       message: "Data not found",
     };
 
-    const res = await db.baseProposal.update({
+    const res = await db.componentProposal.update({
       where: {
         id: master_id,
       },
@@ -149,7 +149,7 @@ export const UpdateBaseProposal = async (master_id: string, master_update: IBase
 
 export const DeleteBaseProposal = async (master_id: string) => {
   try {
-    const existMaster = await db.baseProposal.findFirst({
+    const existMaster = await db.componentProposal.findFirst({
       where: {
         id: master_id
       },
@@ -160,7 +160,7 @@ export const DeleteBaseProposal = async (master_id: string) => {
       message: "Data not found",
     };
     
-    await db.baseProposal.delete({
+    await db.componentProposal.delete({
       where: {
         id: master_id,
       },
