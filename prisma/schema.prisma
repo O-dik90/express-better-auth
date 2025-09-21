@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,13 +11,12 @@ model User {
   id            String    @id @default(uuid())
   email         String    @unique
   name          String?
-
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   emailVerified Boolean
   image         String?   @db.Text
-  sessions      Session[]
   accounts      Account[]
+  sessions      Session[]
 
   @@map("user")
 }
@@ -31,7 +24,7 @@ model User {
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?  @db.Text
@@ -39,7 +32,7 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
+  @@index([userId], map: "session_userId_fkey")
   @@map("session")
 }
 
@@ -48,7 +41,6 @@ model Account {
   accountId             String    @db.Text
   providerId            String    @db.Text
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?   @db.Text
   refreshToken          String?   @db.Text
   idToken               String?   @db.Text
@@ -58,7 +50,9 @@ model Account {
   password              String?   @db.Text
   createdAt             DateTime
   updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId], map: "account_userId_fkey")
   @@map("account")
 }
 
@@ -74,43 +68,44 @@ model Verification {
 }
 
 model ComponentProposal {
-  id            String    @id @default(cuid())
-  name          String
-  category      String
-  description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("component_proposal")
 }
 
 model TemplateProposal {
-  id            String    @id @default(cuid())
-  name          String    @unique
-  masterId      String
-  masterGenpro  MasterGenpro? @relation(fields: [masterId], references: [id], onDelete: Cascade)
-  description   String?
-  bab1          Json?
-  bab2          Json?
-  bab3          Json?
-  bab4          Json?
-  bab5          Json?
-  luaran        Json?
-  lampiran      Json?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String       @id @default(cuid())
+  name         String       @unique
+  masterId     String
+  description  String?
+  bab1         String?      @db.LongText
+  bab2         String?      @db.LongText
+  bab3         String?      @db.LongText
+  bab4         String?      @db.LongText
+  bab5         String?      @db.LongText
+  luaran       String?      @db.LongText
+  lampiran     String?      @db.LongText
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  masterGenpro MasterGenpro @relation(fields: [masterId], references: [id], onDelete: Cascade)
 
+  @@index([masterId], map: "template_proposal_masterId_fkey")
   @@map("template_proposal")
 }
 
 model MasterGenpro {
-  id            String    @id @default(cuid())
-  name          String
-  init          String
-  description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id               String             @id @default(cuid())
+  name             String
+  init             String
+  description      String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  TemplateProposal TemplateProposal[]
 
   @@map("master_genpro")
-  TemplateProposal TemplateProposal[]
 }
